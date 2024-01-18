@@ -99,7 +99,7 @@ Laravel Webfonts primary functionality while in production is to provide a simpl
 
 This is done by reading the compiled `woff2` fonts from your Vite or Bud manifest and generating the appropriate markup for you to place inside of `<head>`.
 
-In most cases, you can simply use the `@preloadFonts` Blade directive to handle building and echoing the font preload HTML markup..
+In most cases, you can simply use the `@preloadFonts` Blade directive to handle building and echoing the font preload HTML markup.
 
 Alternatively to the Blade directive, you can access the `PreloadFonts` class directly using the `Webfonts` Facade:
 
