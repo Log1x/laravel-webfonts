@@ -104,7 +104,7 @@ In most cases, you can simply use the `@preloadFonts` Blade directive to handle 
 Alternatively to the Blade directive, you can access the `PreloadFonts` class directly using the `Webfonts` Facade:
 
 ```php
-use Log1x\LaravelWebfonts\Webfonts;
+use Log1x\LaravelWebfonts\Facades\Webfonts;
 
 // Retrieve an array of compiled font paths.
 $fonts = Webfonts::fonts();
