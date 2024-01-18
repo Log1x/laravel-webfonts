@@ -76,7 +76,7 @@ The generated `@font-face` at-rules will look like this:
 
 Adding additional fonts will cause them to be prepended to the existing `fonts` stylesheet.
 
-### Importing Stylesheet
+### Importing Fonts
 
 When fonts are installed for the first time, a `fonts` stylesheet is created in your project's stylesheet folder. In a vanilla Laravel project, this is typically `resources/css/fonts.css`.
 
