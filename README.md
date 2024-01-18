@@ -4,7 +4,7 @@
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/laravel-webfonts.svg?style=flat-square)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/log1x/laravel-webfonts/main.yml?branch=main&style=flat-square)
 
-Laravel Webfonts allows you to easily download, install, and preload over 1500 Google Fonts locally in your Laravel project.
+Laravel Webfonts allows you to easily download, install, and preload over 1500 Google fonts locally in your Laravel project.
 
 ![Demo](https://i.imgur.com/JgotyKK.gif)
 
@@ -20,7 +20,7 @@ Laravel Webfonts allows you to easily download, install, and preload over 1500 G
 
 - [PHP](https://secure.php.net/manual/en/install.php) >= 8.1
 - [Composer](https://getcomposer.org/download/)
-- [Laravel](https://github.com/laravel/laravel) >= 10.0 or [Acorn](https://github.com/roots/acorn) >= 4.0
+- [Laravel](https://github.com/laravel/laravel) >= 10.0
 
 ## Installation
 
