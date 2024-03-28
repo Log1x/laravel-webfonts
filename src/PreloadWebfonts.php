@@ -50,24 +50,6 @@ class PreloadWebfonts
     }
 
     /**
-     * Handle the font preload markup for WordPress.
-     */
-    public function handleWordPress(): void
-    {
-        if (! $this->isWordPress()) {
-            return;
-        }
-
-        add_filter('wp_head', function () {
-            if (! $markup = $this->build()) {
-                return;
-            }
-
-            echo "{$markup}\n";
-        }, 5);
-    }
-
-    /**
      * Retrieve the Webfonts instance.
      */
     protected function webfonts(): Webfonts
@@ -80,24 +62,8 @@ class PreloadWebfonts
      */
     protected function asset(string $file): string
     {
-        return ! $this->isAcorn()
-            ? asset($file)
-            : \Roots\asset($file);
-    }
-
-    /**
-     * Determine if Acorn is installed.
-     */
-    protected function isAcorn(): bool
-    {
-        return function_exists('\Roots\asset');
-    }
-
-    /**
-     * Determine if the application is running WordPress.
-     */
-    protected function isWordPress(): bool
-    {
-        return class_exists('\WP') && function_exists('\add_filter');
+        return function_exists('\Roots\asset')
+            ? \Roots\asset($file)
+            : asset($file);
     }
 }

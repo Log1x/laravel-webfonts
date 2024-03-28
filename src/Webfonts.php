@@ -22,6 +22,11 @@ class Webfonts
     protected PreloadWebfonts $preload;
 
     /**
+     * Determine if the WordPress handler has ran.
+     */
+    protected bool $wordpress = false;
+
+    /**
      * Create a new Webfonts instance.
      */
     public function __construct()
@@ -36,6 +41,16 @@ class Webfonts
     public static function make(): self
     {
         return new static();
+    }
+
+    /**
+     * Run the Webfonts handlers.
+     */
+    public function handle(): self
+    {
+        $this->handleWordPress();
+
+        return $this;
     }
 
     /**
@@ -58,6 +73,26 @@ class Webfonts
         return collect($this->manifest())
             ->filter(fn ($value, $key) => Str::endsWith($key, '.woff2'))
             ->toArray();
+    }
+
+    /**
+     * Handle the font preload markup for WordPress.
+     */
+    protected function handleWordPress(): void
+    {
+        if ($this->wordpress || ! $this->isWordPress() || ! $this->fonts()) {
+            return;
+        }
+
+        add_filter('wp_head', function () {
+            if (! $markup = $this->preload()->build()) {
+                return;
+            }
+
+            echo "{$markup}\n";
+        }, 5);
+
+        $this->wordpress = true;
     }
 
     /**
@@ -100,5 +135,13 @@ class Webfonts
         return collect($manifest)
             ->map(fn ($value, $key) => "build/{$value['file']}")
             ->all();
+    }
+
+    /**
+     * Determine if the application is running WordPress.
+     */
+    protected function isWordPress(): bool
+    {
+        return class_exists('\WP') && function_exists('\add_filter');
     }
 }
