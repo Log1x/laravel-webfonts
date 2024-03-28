@@ -85,7 +85,7 @@ class PreloadWebfonts
         }
 
         add_filter('wp_head', function () {
-            if (! $this->webfonts) {
+            if (! $this->webfonts()) {
                 return;
             }
 
