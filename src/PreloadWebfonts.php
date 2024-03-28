@@ -19,6 +19,7 @@ class PreloadWebfonts
     public function __construct(Webfonts $webfonts)
     {
         $this->webfonts = $webfonts;
+        $this->handleWordPress();
     }
 
     /**
@@ -84,7 +85,7 @@ class PreloadWebfonts
         }
 
         add_filter('wp_head', function () {
-            if (! $this->fonts()) {
+            if (! $this->webfonts) {
                 return;
             }
 
