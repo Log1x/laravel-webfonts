@@ -23,11 +23,10 @@ class Webfonts
 
     /**
      * Create a new Webfonts instance.
-     *
-     * @return void
      */
     public function __construct()
     {
+        $this->fonts = $this->fonts();
         $this->preload = PreloadWebfonts::make($this);
     }
 
@@ -56,7 +55,7 @@ class Webfonts
             return $this->fonts;
         }
 
-        return $this->fonts = collect($this->manifest())
+        return collect($this->manifest())
             ->filter(fn ($value, $key) => Str::endsWith($key, '.woff2'))
             ->toArray();
     }
