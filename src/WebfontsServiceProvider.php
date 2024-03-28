@@ -33,6 +33,8 @@ class WebfontsServiceProvider extends ServiceProvider
 
         Blade::directive('preloadFonts', fn () => "<?php echo app('laravel-webfonts')->preload()->build(); ?>");
 
-        $this->app->make('laravel-webfonts');
+        $webfonts = $this->app->make('laravel-webfonts');
+
+        $webfonts->preload()->handleWordPress();
     }
 }

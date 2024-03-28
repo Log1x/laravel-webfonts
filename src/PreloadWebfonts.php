@@ -2,24 +2,24 @@
 
 namespace Log1x\LaravelWebfonts;
 
-use Illuminate\Support\Str;
-
 class PreloadWebfonts
 {
     /**
      * The Webfonts instance.
      */
-    protected $webfonts;
+    protected Webfonts $webfonts;
+
+    /**
+     * The font preload markup.
+     */
+    protected ?string $markup = null;
 
     /**
      * Create a new Preload Fonts instance.
-     *
-     * @return void
      */
     public function __construct(Webfonts $webfonts)
     {
         $this->webfonts = $webfonts;
-        $this->handleWordPress();
     }
 
     /**
@@ -33,12 +33,38 @@ class PreloadWebfonts
     /**
      * Build the font preload markup.
      */
-    public function build(): string
+    public function build(): ?string
     {
-        return collect($this->webfonts()->fonts())
+        if ($this->markup) {
+            return $this->markup;
+        }
+
+        if (! $fonts = $this->webfonts()->fonts()) {
+            return null;
+        }
+
+        return $this->markup = collect($fonts)
             ->map(fn ($font) => $this->asset($font))
             ->map(fn ($font) => "<link rel='preload' href='{$font}' as='font' type='font/woff2' crossorigin>")
-            ->implode(PHP_EOL);
+            ->implode("\n");
+    }
+
+    /**
+     * Handle the font preload markup for WordPress.
+     */
+    public function handleWordPress(): void
+    {
+        if (! $this->isWordPress()) {
+            return;
+        }
+
+        add_filter('wp_head', function () {
+            if (! $markup = $this->build()) {
+                return;
+            }
+
+            echo "{$markup}\n";
+        }, 5);
     }
 
     /**
@@ -68,28 +94,10 @@ class PreloadWebfonts
     }
 
     /**
-     * Determine if WordPress is available.
+     * Determine if the application is running WordPress.
      */
     protected function isWordPress(): bool
     {
         return class_exists('\WP') && function_exists('\add_filter');
-    }
-
-    /**
-     * Handle preloading on WordPress.
-     */
-    protected function handleWordPress(): void
-    {
-        if (! $this->isAcorn() || ! $this->isWordPress()) {
-            return;
-        }
-
-        add_filter('wp_head', function () {
-            if (! $this->webfonts()) {
-                return;
-            }
-
-            echo Str::finish($this->build(), PHP_EOL);
-        }, 5);
     }
 }
