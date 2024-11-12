@@ -40,7 +40,7 @@ class Webfonts
      */
     public static function make(): self
     {
-        return new static();
+        return new static;
     }
 
     /**
