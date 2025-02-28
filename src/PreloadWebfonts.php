@@ -50,20 +50,20 @@ class PreloadWebfonts
     }
 
     /**
+     * Retrieve the asset URL.
+     */
+    protected function asset(string $font): string
+    {
+        return function_exists('\Roots\asset')
+            ? \Roots\asset($font)
+            : asset("build/{$font}");
+    }
+
+    /**
      * Retrieve the Webfonts instance.
      */
     protected function webfonts(): Webfonts
     {
         return $this->webfonts;
-    }
-
-    /**
-     * Retrieve the public asset URL for the given file.
-     */
-    protected function asset(string $file): string
-    {
-        return function_exists('\Roots\asset')
-            ? \Roots\asset($file)
-            : asset($file);
     }
 }
