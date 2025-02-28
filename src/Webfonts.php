@@ -27,7 +27,12 @@ class Webfonts
     protected bool $wordpress = false;
 
     /**
-     * The exception list.
+     * The fonts to allow.
+     */
+    public static array $only = [];
+
+    /**
+     * The fonts to exclude.
      */
     public static array $except = [];
 
@@ -75,18 +80,28 @@ class Webfonts
     }
 
     /**
+     * Set the fonts to allow.
+     */
+    public static function only(array $only): void
+    {
+        static::$only = [...static::$only, ...$only];
+    }
+
+    /**
      * Retrieve the fonts from the manifest.
      */
-    public function fonts(array $except = []): array
+    public function fonts(array $except = [], array $only = []): array
     {
         if ($this->fonts) {
             return $this->fonts;
         }
 
         $except = [...static::$except, ...$except];
+        $only = [...static::$only, ...$only];
 
         return collect($this->manifest())
             ->filter(fn ($value, $key) => Str::endsWith($key, '.woff2'))
+            ->filter(fn ($value, $key) => blank($only) || in_array(basename($key), $only) || in_array(basename($key, '.woff2'), $only))
             ->reject(fn ($value, $key) => in_array(basename($key), $except) || in_array(basename($key, '.woff2'), $except))
             ->all();
     }

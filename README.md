@@ -113,11 +113,15 @@ $fonts = Webfonts::fonts();
 $html = Webfonts::preload()->build();
 ```
 
-Excluding certain fonts from being preloaded can be done inside `register()` of a service provider:
+Allowing/excluding certain fonts from being preloaded can be done inside `register()` of a service provider:
 
 ```php
 use Log1x\LaravelWebfonts\Webfonts;
 
+// Allow specific fonts.
+Webfonts::only(['inter-v13-latin-regular']);
+
+// Exclude specific fonts.
 Webfonts::except(['inter-v13-latin-500']);
 ```
 
