@@ -12,8 +12,8 @@ Laravel Webfonts allows you to easily download, install, and preload over 1500 G
 
 - 🔍️ Search and install over 1500 Google fonts from the public [google-webfonts-helper](https://github.com/majodev/google-webfonts-helper) API.
 - ⚡️ Automatically generate `@font-face` CSS `at-rules` when installing fonts using CLI.
-- 🧑‍💻 Supports [Vite](https://vitejs.dev/) and [Bud](https://github.com/roots/bud) out of the box with zero configuration.
-- ⚡️ Provides an easy-to-use `@preloadFonts` Blade directive to preload fonts found in the Vite/Bud manifest.
+- 🧑‍💻 Supports [Vite](https://vitejs.dev/) out of the box with zero configuration.
+- ⚡️ Provides an easy-to-use `@preloadFonts` Blade directive to preload fonts found in the Vite manifest.
 - 🚀 Automatically injects font preload markup into `wp_head` on WordPress sites running [Acorn](https://github.com/roots/acorn).
 
 ## Requirements
@@ -97,7 +97,7 @@ You must import the generated `fonts` file into your project's primary styleshee
 
 Laravel Webfonts primary functionality while in production is to provide a simple way to preload your locally hosted webfonts.
 
-This is done by reading the compiled `woff2` fonts from your Vite or Bud manifest and generating the appropriate markup for you to place inside of `<head>`.
+This is done by reading the compiled `woff2` fonts from your Vite manifest and generating the appropriate markup for you to place inside of `<head>`.
 
 In most cases, you can simply use the `@preloadFonts` Blade directive to handle building and echoing the font preload HTML markup.
 
@@ -111,6 +111,14 @@ $fonts = Webfonts::fonts();
 
 // Build the font preload HTML markup.
 $html = Webfonts::preload()->build();
+```
+
+Excluding certain fonts from being preloaded can be done inside `register()` of a service provider:
+
+```php
+use Log1x\LaravelWebfonts\Webfonts;
+
+Webfonts::except(['inter-v13-latin-500']);
 ```
 
 ## Bug Reports
