@@ -14,7 +14,7 @@ class Webfonts
     /**
      * The asset manifest.
      */
-    protected array $manifest = [];
+    protected ?array $manifest = null;
 
     /**
      * The Preload Webfonts instance.
@@ -25,6 +25,11 @@ class Webfonts
      * Determine if the WordPress handler has ran.
      */
     protected bool $wordpress = false;
+
+    /**
+     * The exception list.
+     */
+    public static array $except = [];
 
     /**
      * Create a new Webfonts instance.
@@ -62,17 +67,28 @@ class Webfonts
     }
 
     /**
+     * Set the fonts to exclude.
+     */
+    public static function except(array $except): void
+    {
+        static::$except = [...static::$except, ...$except];
+    }
+
+    /**
      * Retrieve the fonts from the manifest.
      */
-    public function fonts(): array
+    public function fonts(array $except = []): array
     {
         if ($this->fonts) {
             return $this->fonts;
         }
 
+        $except = [...static::$except, ...$except];
+
         return collect($this->manifest())
             ->filter(fn ($value, $key) => Str::endsWith($key, '.woff2'))
-            ->toArray();
+            ->reject(fn ($value, $key) => in_array(basename($key), $except) || in_array(basename($key, '.woff2'), $except))
+            ->all();
     }
 
     /**
@@ -100,25 +116,7 @@ class Webfonts
      */
     protected function manifest(): array
     {
-        if ($this->manifest) {
-            return $this->manifest;
-        }
-
-        if ($manifest = $this->budManifest()) {
-            return $this->manifest = $manifest;
-        }
-
-        return $this->manifest = $this->viteManifest();
-    }
-
-    /**
-     * Retrieve the Bud manifest.
-     */
-    protected function budManifest(): array
-    {
-        return file_exists($manifest = public_path('manifest.json'))
-            ? json_decode(file_get_contents($manifest), true)
-            : [];
+        return $this->manifest ??= $this->viteManifest();
     }
 
     /**
@@ -133,7 +131,7 @@ class Webfonts
         $manifest = json_decode(file_get_contents($manifest), true);
 
         return collect($manifest)
-            ->map(fn ($value, $key) => "build/{$value['file']}")
+            ->map(fn ($value, $key) => $value['file'])
             ->all();
     }
 
